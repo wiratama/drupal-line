@@ -1,0 +1,17 @@
+## BE
+linebot.be-customer-index:
+  path: 'admin/structure/linebot/customer'
+  defaults:
+    _controller: '\Drupal\linebot\Controller\BE\LineBotCustomerController::index'
+    _title: 'Line Bot Customer'
+  requirements:
+    _permission: 'administer linebot'
+
+linebot.be-customer-add:
+  path: 'admin/structure/linebot/customer/add-customer/{customer_id}'
+  defaults:
+    _form: '\Drupal\linebot\Form\BE\LineBotCustomerForm'
+    _title: 'Line Bot Customer'
+    customer_id:
+  requirements:
+    _permission: 'administer linebot'

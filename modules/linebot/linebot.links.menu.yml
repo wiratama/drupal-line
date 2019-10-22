@@ -1,0 +1,6 @@
+linebot.be-customer-index:
+  title: 'Line Bot'
+  description: 'Line Bot'
+  parent: system.admin_content
+  route_name: linebot.be-customer-index
+  weight: 99

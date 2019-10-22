@@ -1,0 +1,32 @@
+<?php
+
+function linebot_schema() {
+  $schema['customer'] = array(
+    'fields' => array(
+      'customer_id'=>array(
+        'type'=>'serial',
+        'not null' => true,
+      ),
+      'phone' => array(
+        'type' => 'text',
+        'size' => 'medium',
+      ),
+      'line_id' => array(
+        'type' => 'text',
+        'size' => 'medium',
+      ),
+      'created_on' => array(
+        'type' => 'varchar',
+        'mysql_type' => 'datetime',
+        'not null' => FALSE,
+      ),
+      'updated_on' => array(
+        'type' => 'varchar',
+        'mysql_type' => 'datetime',
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('customer_id'),
+  );
+  return $schema;
+}
