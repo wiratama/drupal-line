@@ -25,32 +25,37 @@ use LINE\LINEBot\Exception\InvalidEventRequestException;
 use LINE\LINEBot\Exception\InvalidSignatureException;
 
 class LineBotController extends ControllerBase {
+    public function home() {
+        echo "index";
+        die();
+    }
     
     public function responseMessage() {
-        $basic_id = \Drupal::request()->query->get('basic_id');
+        $basic_id = \Drupal::request()->get('bot_id');
         $basic_id = Html::escape(Xss::filter($basic_id));
 
         $merchant = $this->getMerchantData($basic_id);
+        var_dump($merchant);
 
-        $bot = new LINEBot(new CurlHTTPClient($merchant->get('field_channel_access_token')->getString()), [
-            'channelSecret' => $merchant->get('field_channel_secret')->getString()
+        $bot = new LINEBot(new CurlHTTPClient($merchant['channel_access_token']), [
+            'channelSecret' => $merchant['channel_secret']
         ]);
-        
 
-        $signature = $request->header(HTTPHeader::LINE_SIGNATURE);
+        $signature = \Drupal::request()->headers->get(HTTPHeader::LINE_SIGNATURE);
         if (is_null($signature)) {
-            return new JsonResponse('Bad Request', 400, ['Content-Type'=> 'application/json']);
+            return new JsonResponse('Bad Request', 400);
         }
-
-
+        
         try {
-            $events = $bot->parseEventRequest(json_encode(\Drupal::request()->query->all()), $signature);
+            $events = $bot->parseEventRequest(\Drupal::request()->getContent(), $signature);
         } catch (InvalidSignatureException $e) {
-            return new JsonResponse('Bad Request', 400, ['Content-Type'=> 'application/json']);
+            \Drupal::logger('line_bot')->error($e.'-e1');
+            return new JsonResponse('Bad Request', 400);
         } catch (InvalidEventRequestException $e) {
-            return new JsonResponse('Bad Request', 400, ['Content-Type'=> 'application/json']);
+            \Drupal::logger('line_bot')->error($e.'-e2');
+            return new JsonResponse('Bad Request', 400);
         }
-
+        
         foreach ($events as $event) {
             if (!($event instanceof MessageEvent)) {
                 continue;
@@ -64,15 +69,26 @@ class LineBotController extends ControllerBase {
             $resp = $bot->replyText($event->getReplyToken(), $replyText);
         }
 
-        return new JsonResponse('Ok', 200, ['Content-Type'=> 'application/json']);
+        return new JsonResponse('Ok', 200);
     }
 
     private function getMerchantData($basic_id = null) {
-        $merchant_data = \Drupal::service('entity.query')->get('node');
-        $merchant_data = $merchant_data->condition('type', 'merchant')->condition('field_basic_id', $basic_id);
-        $merchant_nid = $merchant_data->execute();
+        $merchant = [];
 
-        $merchant = \Drupal::entityTypeManager()->getStorage('node')->load($merchant_nid);
+        $merchant_data = \Drupal::service('entity.query')->get('node');
+        $merchant_data = $merchant_data->condition('type', 'merchant')->condition('field_basic_id', $basic_id)->range(0,1);
+        $merchant_nid = $merchant_data->execute();
+        $merchants = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($merchant_nid);
+        if($merchants) {
+            foreach($merchants as $merch) {
+                $merchant = [
+                    'basic_id'             => $merch->get('field_basic_id')->getString(),
+                    'channel_access_token' => $merch->get('field_channel_access_token')->getString(),
+                    'channel_id'           => $merch->get('field_channel_id')->getString(),
+                    'channel_secret'       => $merch->get('field_channel_secret')->getString(),
+                ];
+            }
+        }
 
         return $merchant;
     }

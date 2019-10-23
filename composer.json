@@ -6,7 +6,9 @@
     "require": {
         "composer/installers": "^1.0.24",
         "wikimedia/composer-merge-plugin": "^1.4",
-        "linecorp/line-bot-sdk": "^3.14"
+        "linecorp/line-bot-sdk": "^3.14",
+        "drush/drush": "^9.7",
+        "google/cloud-dialogflow": "^0.10.0"
     },
     "replace": {
         "drupal/core": "^8.7"

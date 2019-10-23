@@ -15,3 +15,20 @@ linebot.be-customer-add:
     customer_id:
   requirements:
     _permission: 'administer linebot'
+
+##FE
+linebot.fe-index:
+  path: '/line-bot'
+  defaults:
+    _controller: '\Drupal\linebot\Controller\FE\LineBotController::home'
+    _title: 'Response Message'
+  requirements:
+    _access: 'TRUE'
+
+linebot.fe-response-message:
+  path: '/linebot/{bot_id}'
+  defaults:
+    _controller: '\Drupal\linebot\Controller\FE\LineBotController::responseMessage'
+    _title: 'Response Message'
+  requirements:
+    _access: 'TRUE'
