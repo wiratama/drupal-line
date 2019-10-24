@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "wa-bot1-elrggg",
+  "private_key_id": "5b0bc36cb66bf4df0e9657bb732646c75355bcf6",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDP2OVkkFMlhryP\nQzaBWqCjKK3thk5BNnbVJQ2eMRm8cdgxTVv/ow5ZSOilXZUB93QMKtLQ7H/rHdu+\nmo6O1x41ISayqWXzscEZN2vyk1bP/Vc/YLQ4qv3B2t4WAZYdaXMebaK955SnCL5R\njJr6Zs+gApOkWuuiuzf6loGI1ZikFkHXq44m5e/BsyBaBxXfshJ896bJe+iOZQGZ\nodagCYrwkNEcuyYyEi/cm5GFm6naJgj3tnL/yNJgkde1tE9Ll6yaj9vbVtgQ4QO3\nlcvKnVEohKiBYuvyFBhvdpGL90jMRxyl2caSsyBcoTAVrXEW04XsYGtPGeiAmm4S\nWVi4gxanAgMBAAECggEAFtmslnq7eWOvtTxZcK0q/eUKAhQC5G59b/9r2NljD/Gg\nKANuOtONT0mRsiRwrk+rJW9L0AZAJfQZZYIObCvAOW0UmQ3AlKMVLJWIO5nxMFqU\nzfXuulAqJ7bNNbQk8cTXECBThPdBw39VlReVLjRBXUELREVupGxawiTrxsRczKUn\nBAauzg6b5QWRVRWCsO7nwEiMtW8uTAYPJ5kENma8DyFKOzIVV++K7rTpd3xnzxZk\n7iQqZ9Ooe2yLr4v6+u0WvPeMUp5Y8D0LewjRVxVm0NhdddRDGAjxsqyB4k5RP2NQ\nHOrC5YKyqdVFQDW2zTD55T/zvaElwcCKM/+YF9jwUQKBgQDvwpbc+2M0wkl0yKhA\n7rsLYkkYm+DCxnJ31HU2Z4XkG3W1toOj3acHqszMiUWs9dcYYFog0UenspcFlM8E\nP42y1RxaEPG9WDQZCzZN4dX7iNebQLDfdmeqLf6oyYH2dmZAuvg2F0TPjYQTsC1w\n7AW7W9q3L3KX1bhzdlY1YdcUHwKBgQDd7PEPg4GGLSj9zHbAh+ECg5gHchP2TfUN\n9RBZmyZd5HFc+NdzMWOhD89nIm318h9mG77LDtgipY7WrFSp6vUPViiGy2bKQjdR\nx/hL/e2/NnZuEUWKSZLboiQAQIzb4s83ys0a77PO0XYKr161M028IYd7AT48j4Nu\nz9LQEvLseQKBgAbGfPTptbf79Y9zTC3pkSeVM3OalBNtADcareVHr6Tukbj822N6\nFApHbVoqVum4WMe7kVB0GY5HobTqq573HM3877wr1mj/YRmEE5jH1QAyscUVYuot\nsmhAvH2QlDeeyOzzW6hLqAoleaIEzIPwZ4kP43JhyN85jujUY0NG7IkJAoGAdn+4\nUCJWHQEsLCjrF+72FNOTcBZX1mLWAPfkHRSdLfF3Hr+4u0eZ/Txl8JoPwQ3h+jHC\ndMaeXhGs7a/jHT/aTrAgv6kIX+NvinmOeXVDZ6B7KFaMnUSf6CrxsjjFffvjzdS6\nJDHt/vcVYqs1lOeqEFSO9P068DdpZNgPpw8XK3ECgYEAv9fMRAvWZ32oJ9ZklQXd\nQJoasme20TVApHh2m785oZU/AZ6ILc/u387ORwzfJNggcptdDfz38SldQimsqZPU\n3cLaDMr73Uloz+4Qvf9CQa321D5BK8gfxSuLkG5nInVeTirMpwSMkPqBvvuCN0BV\nQ2wgeEN9R80Joc1rwNjO+NQ=\n-----END PRIVATE KEY-----\n",
+  "client_email": "just-coffe-shop-bot@wa-bot1-elrggg.iam.gserviceaccount.com",
+  "client_id": "106904226110386683199",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/just-coffe-shop-bot%40wa-bot1-elrggg.iam.gserviceaccount.com"
+}

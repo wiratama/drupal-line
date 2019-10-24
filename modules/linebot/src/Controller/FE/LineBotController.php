@@ -27,6 +27,8 @@ use LINE\LINEBot\Exception\InvalidSignatureException;
 class LineBotController extends ControllerBase {
     public function home() {
         echo "index";
+        // var_dump(file_exists(getcwd().'/modules/linebot/config/creds'));
+        
         die();
     }
     
@@ -35,7 +37,6 @@ class LineBotController extends ControllerBase {
         $basic_id = Html::escape(Xss::filter($basic_id));
 
         $merchant = $this->getMerchantData($basic_id);
-        var_dump($merchant);
 
         $bot = new LINEBot(new CurlHTTPClient($merchant['channel_access_token']), [
             'channelSecret' => $merchant['channel_secret']
@@ -56,7 +57,9 @@ class LineBotController extends ControllerBase {
             return new JsonResponse('Bad Request', 400);
         }
         
-        foreach ($events as $event) {
+        foreach ($events as $key_event=>$event) {
+            $lineId = $event->getUserId();
+            
             if (!($event instanceof MessageEvent)) {
                 continue;
             }
@@ -66,7 +69,18 @@ class LineBotController extends ControllerBase {
             }
             
             $replyText = $event->getText();
-            $resp = $bot->replyText($event->getReplyToken(), $replyText);
+            if ($event instanceof FollowEvent) {
+                $state = 'greeting';
+            } else {
+                $is_regirtered = $this->getuserLineID($lineId);
+                if(!$is_regirtered) {
+                    $state = 'greeting';
+                }
+            }
+            
+            $dialogFlowResponse = $this->botState($state, $replyText);
+            $bot->replyText($event->getReplyToken(), $dialogFlowResponse['responseText']);
+            $bot->replyText($event->getReplyToken(), 'respon dialog flow :'.json_encode($dialogFlowResponse));
         }
 
         return new JsonResponse('Ok', 200);
@@ -91,5 +105,33 @@ class LineBotController extends ControllerBase {
         }
 
         return $merchant;
+    }
+
+
+    private function getuserLineID($lineID = null)
+    {
+        $lineID = $basic_id = Html::escape(Xss::filter($lineID));
+
+        $query = \Drupal::database()->select('customer', 'm')
+                ->fields('m')
+                ->condition('line_id', $lineID);
+        $results = $query->execute()->fetch();
+
+        return $results;
+    }
+
+    private function botState($state = null, $input_message = '')
+    {
+        $currentState = [];
+        
+        if($state == 'greeting') {
+            $linebot_service_dialogflow = \Drupal::service('linebot_service.dialogflow');
+            $params = array(
+                'text' => $input_message,
+            );
+            $currentState = $linebot_service_dialogflow->getDialogFlowIntents($params);
+        }
+
+        return $currentState;
     }
 }

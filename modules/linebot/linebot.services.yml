@@ -1,0 +1,3 @@
+services:
+  linebot_service.dialogflow:
+    class: Drupal\linebot\Services\DialogFlowService
