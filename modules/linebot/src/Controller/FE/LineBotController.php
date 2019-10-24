@@ -79,8 +79,8 @@ class LineBotController extends ControllerBase {
             }
             
             $dialogFlowResponse = $this->botState($state, $replyText);
-            $bot->replyText($event->getReplyToken(), $dialogFlowResponse['responseText']);
-            $bot->replyText($event->getReplyToken(), 'respon dialog flow :'.json_encode($dialogFlowResponse));
+            // $bot->replyText($event->getReplyToken(), $dialogFlowResponse['responseText']);
+            $bot->replyText($event->getReplyToken(), 'dialog_flow_data :'.json_encode($dialogFlowResponse));
         }
 
         return new JsonResponse('Ok', 200);
