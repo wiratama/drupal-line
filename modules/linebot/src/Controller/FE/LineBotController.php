@@ -49,6 +49,7 @@ class LineBotController extends ControllerBase {
             '17' => 'show_subscribtion',
             '18' => 'redirect_to_tada',
             '19' => 'back_from_tada',
+            '20' => 'existing_user',
         ];
     }
 
@@ -88,7 +89,6 @@ class LineBotController extends ControllerBase {
         
         foreach ($events as $key_event=>$event) {
             $current_state = $this->getCurrentState();
-            $state = $current_state;
             $lineId = $event->getUserId();
             
             if (!($event instanceof MessageEvent)) {
@@ -102,15 +102,16 @@ class LineBotController extends ControllerBase {
             $replyText = $event->getText();
             if ($event instanceof FollowEvent) {
                 $state = 1;
-            } else {
-                $is_regirtered = $this->getuserLineID($lineId);
-                if(!$is_regirtered) {
-                    $state = 1;
-                }
-            }
+            } 
             
-            if($current_state==1 and $this->validPhone($input_message)) {
-                $state = 2;
+            $is_regirtered = $this->getuserLineID($lineId);
+            if($is_regirtered) {
+                $state = 20;
+            } else {
+                $state = 1;
+                if($current_state==1 and $this->validPhone($input_message)) {
+                    $state = 2;
+                }
             }
 
             if($current_state==2) {
@@ -156,8 +157,7 @@ class LineBotController extends ControllerBase {
                 ->condition('line_id', $lineID);
         $results = $query->execute()->fetch();
 
-        // return $results;
-        return true;
+        return $results;
     }
 
     private function botResponse($state = null, $input_message = '')
@@ -181,8 +181,13 @@ class LineBotController extends ControllerBase {
                 $this->setCurrentState($state);
                 break;
             
-                case '2':
+            case '3':
                 $stateResponse = 'Terimakasih. Kami sedang menvalidasi kode otp anda, mohon menunggu';
+                $this->setCurrentState($state);
+                break;
+            
+            case '20':
+                $stateResponse = 'Beli Subscription - Tampilkan Voucher - Tampilkan Kartu';
                 $this->setCurrentState($state);
                 break;
 
