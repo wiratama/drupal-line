@@ -9,7 +9,7 @@ use Google\Cloud\Dialogflow\V2\QueryInput;
 class DialogFlowService {
     public function getDialogFlowIntents($params = array()) {
         if(!empty($params)) {
-            $projectId = 'wa-bot1-elrggg';
+            $projectId = 'just-coffe-shop-guglhb';
             $languageCode = 'en';
             $text = $params['text'];
 

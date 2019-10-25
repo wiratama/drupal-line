@@ -88,6 +88,7 @@ class LineBotController extends ControllerBase {
         
         foreach ($events as $key_event=>$event) {
             $current_state = $this->getCurrentState();
+            $state = $current_state;
             $lineId = $event->getUserId();
             
             if (!($event instanceof MessageEvent)) {
@@ -107,7 +108,7 @@ class LineBotController extends ControllerBase {
                     $state = 1;
                 }
             }
-
+            
             if($current_state==1 and $this->validPhone($input_message)) {
                 $state = 2;
             }
@@ -116,8 +117,8 @@ class LineBotController extends ControllerBase {
                 $state = 3;
             }
             
-            $currentState = $this->botResponse($state, $replyText);
-            $bot->replyText($event->getReplyToken(), $currentState);
+            $currentresponse = $this->botResponse($state, $replyText);
+            $bot->replyText($event->getReplyToken(), $currentresponse);
         }
 
         return new JsonResponse('Ok', 200);
@@ -155,46 +156,33 @@ class LineBotController extends ControllerBase {
                 ->condition('line_id', $lineID);
         $results = $query->execute()->fetch();
 
-        return $results;
+        // return $results;
+        return true;
     }
 
     private function botResponse($state = null, $input_message = '')
     {
         $dialogFlowResponse = [];
+        $responseDialogFlow = '';
         $linebot_service_dialogflow = \Drupal::service('linebot_service.dialogflow');
         $params = array(
             'text' => $input_message,
         );
         $dialogFlowResponse = $linebot_service_dialogflow->getDialogFlowIntents($params);
 
-        switch ($dialogFlowResponse['intentName']) {
-            case 'greetingIntent':
-                $responseDialogFlow = $dialogFlowResponse['responseText'];
-                break;
-            
-            case 'fallBackIntent':
-                $responseDialogFlow = $dialogFlowResponse['responseText'];
-                break;
-            
-            default:
-                $responseDialogFlow = '';
-                break;
-        }
-
         switch ($state) {
             case '1':
-                $stateResponse = $responseDialogFlow.'
-Silakan masukkan nomor handphone Anda untuk melanjutkan. Contoh: +6281312345938';
+                $stateResponse = 'Silakan masukkan nomor handphone Anda untuk melanjutkan. Contoh: +6281312345938';
                 $this->setCurrentState($state);
                 break;
             
             case '2':
-                $stateResponse = $stateResponse = 'Masukkan kode verifikasi yang sudah kami kirimkan melalui SMS ke nomer '.$input_message;
+                $stateResponse = 'Masukkan kode verifikasi yang sudah kami kirimkan melalui SMS ke nomer '.$input_message;
                 $this->setCurrentState($state);
                 break;
             
                 case '2':
-                $stateResponse = $stateResponse = 'Terimakasih. Kami sedang menvalidasi kode otp anda, mohon menunggu';
+                $stateResponse = 'Terimakasih. Kami sedang menvalidasi kode otp anda, mohon menunggu';
                 $this->setCurrentState($state);
                 break;
 
@@ -203,7 +191,22 @@ Silakan masukkan nomor handphone Anda untuk melanjutkan. Contoh: +6281312345938'
                 break;
         }
 
-        return $response;
+        $responseDialogFlow = '';
+        if($dialogFlowResponse['intentName']=='greetingIntent') {
+            $responseDialogFlow = $dialogFlowResponse['responseText'].'
+'.$stateResponse ;
+        } else if($dialogFlowResponse['intentName']=='fallBackIntent - fallback') {
+                $responseDialogFlow = $dialogFlowResponse['responseText'].'
+'.$stateResponse ;
+        }
+        $responseToUser = $responseDialogFlow.' - '.$state;
+
+        // \Drupal::logger('line_bot')->error($dialogFlowResponse['intentName']);
+        // \Drupal::logger('line_bot')->error($state);
+        // \Drupal::logger('line_bot')->error($stateResponse);
+        
+
+        return $responseToUser;
     }
 
     private function setCurrentState($state = null)
@@ -219,7 +222,7 @@ Silakan masukkan nomor handphone Anda untuk melanjutkan. Contoh: +6281312345938'
         $session = \Drupal::request()->getSession();
         $state = $session->get('current_bot_state');
 
-        return ($state) ? $state : null;
+        return ($state) ? $state : 1;
     }
 
     private function validPhone($phone = ''){
